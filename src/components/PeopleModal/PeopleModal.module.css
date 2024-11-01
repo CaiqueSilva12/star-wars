@@ -1,0 +1,46 @@
+.column {
+  display: flex;
+  flex-direction: column; /* Exibe os itens em coluna */
+}
+
+.nameHighlight {
+  background-color: #ffd700;
+  border-radius: 12px;
+  color: #333;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.personDetails {
+  display: grid;
+  gap: 20px;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  width: 100%;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 17px;
+  color: #555;
+}
+
+.detail {
+  display: flex; /* Usando flex para alinhamento */
+  justify-content: space-between; /* Espaço entre label e valor */
+  align-items: center; /* Centralizando verticalmente */
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}

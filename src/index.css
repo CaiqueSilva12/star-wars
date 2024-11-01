@@ -24,8 +24,7 @@ a:hover {
 
 body {
   margin: 0;
-  background: url('/star-wars-background.jpg') no-repeat center center fixed;
-  display: flex;
+  background: url('/star-wars-background.jpg');
   place-items: center;
   min-width: 320px;
   min-height: 100vh;

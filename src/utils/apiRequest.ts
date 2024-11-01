@@ -4,5 +4,5 @@ import axios from 'axios';
 // dotenv.config();
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://swapi.dev/api',
+  baseURL: '',
 });
