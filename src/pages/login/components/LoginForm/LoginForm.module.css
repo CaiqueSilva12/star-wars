@@ -1,0 +1,58 @@
+/* LoginForm.module.css */
+
+.container {
+  background-color: #1f1f2e;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin: 2rem auto;
+  border: 1px solid #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.label {
+  font-size: 18px;
+  color: #e0e0e0;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #dbdbdb;
+  color: #111111;
+}
+
+.submitButton {
+  color: yellow;
+  text-shadow: 2px 2px 4px rgba(0, 0, 255, 0.5);
+  color: black;
+  font-weight: bold;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+

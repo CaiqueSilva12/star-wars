@@ -1,75 +1,82 @@
-import { useEffect, useRef, useState } from 'react';
-import { Button } from 'antd';
+import { useRef, useState } from 'react';
+import { Modal, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
+import LoginForm from './components/LoginForm/LoginForm';
 
 const Login = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isFormVisible, setIsFormVisible] = useState(true);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
+  const [showStartButton, setShowStartButton] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const playAudio = async () => {
-      if (audioRef.current) {
-        try {
-          await audioRef.current.play();
-          setIsAudioPlaying(true);
-        } catch (err) {
-          console.log("Autoplay bloqueado. Clique para iniciar.");
-        }
+  const handlePlayAudio = async () => {
+    if (audioRef.current && !isAudioPlaying) {
+      try {
+        await audioRef.current.play();
+        setIsAudioPlaying(true);
+      } catch (err) {
+        console.log("Autoplay bloqueado. Clique para iniciar.");
       }
-    };
-    playAudio();
-  }, []);
-
-  const handlePlayAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.play();
-      setIsAudioPlaying(true);
     }
   };
 
   const handleAnimationEnd = () => {
+    setShowStartButton(true);
+  };
+
+  const handleNameSubmit = async (name: string) => {
+    console.log('Nome informado:', name);
+
+    Modal.success({
+      content: `Bem-vindo, ${name}!`,
+      centered: true,
+      onOk: async () => {
+        setIsFormVisible(false);
+        setIsAnimationPlaying(true);
+        await handlePlayAudio();
+      },
+    });
+  };
+
+  const handleStartJourney = () => {
     navigate('/home');
   };
 
   return (
     <div className={styles.container}>
       <audio ref={audioRef} src="/star-wars-theme.mp3" loop />
-      {!isAudioPlaying && (
-        <Button
-          className={styles.playButton}
-          onClick={handlePlayAudio}
-          type="primary"
+      {isFormVisible &&
+        <div className={styles.loginFormContainer}>
+          <h2 className={styles.title}>Star Wars</h2>
+          <LoginForm onSubmit={handleNameSubmit} />
+        </div>
+      }
+      {isAnimationPlaying && (
+        <div
+          className={`${styles.crawl} ${styles.animateCrawl}`}
+          onAnimationEnd={handleAnimationEnd}
         >
-          Iniciar Jornada
+          <p>Bem-vindo à sua aventura no universo de Star Wars!</p>
+          <p>Aqui, você encontrará informações incríveis sobre personagens, planetas e naves.</p>
+          <p>Prepare-se para conhecer os heróis e vilões que moldaram a galáxia.</p>
+          <p>Descubra tudo sobre os Jedi e os Sith, suas histórias e poderes.</p>
+          <p>Navegue entre as tabelas para aprender sobre os planetas, desde os desertos de Tatooine até os mundos gelados de Hoth.</p>
+          <p>Saiba mais sobre as naves que cruzam o espaço, como a famosa Millennium Falcon.</p>
+          <p>Explore os detalhes dos filmes e as tramas emocionantes que capturaram milhões de fãs.</p>
+          <p>Cada clique traz novos conhecimentos e curiosidades sobre esse universo fascinante.</p>
+          <p>Você está prestes a mergulhar em um mar de informações que vai fazer você sentir como um verdadeiro fã de Star Wars.</p>
+          <p>Vamos começar essa jornada e descobrir tudo o que Star Wars tem a oferecer!</p>
+          <p>Que a Força esteja com você enquanto você navega por essas informações!</p>
+        </div>
+      )}
+      {showStartButton && (
+        <Button type="primary" onClick={handleStartJourney} className={styles.startButton}>
+          Iniciar a Jornada
         </Button>
       )}
-      <div
-        className={`${styles.crawl} ${isAudioPlaying ? styles.animateCrawl : ''}`}
-        onAnimationEnd={handleAnimationEnd}
-      >
-        <p>Episódio I</p>
-        <p>O Projeto Star Wars.</p>
-        <p>Em uma galáxia muito, muito distante,</p>
-        <p>as estrelas brilham com histórias antigas.</p>
-        <p>O equilíbrio da Força está em jogo,</p>
-        <p>e heróis inesperados se levantam.</p>
-        <p>Junte-se à luta contra o lado sombrio,</p>
-        <p>onde Jedi e Sith duelam em poder.</p>
-        <p>Descubra planetas exóticos e fascinantes,</p>
-        <p>cada um com suas próprias maravilhas.</p>
-        <p>Explore naves icônicas que cruzam o espaço,</p>
-        <p>voando entre as estrelas e perigos.</p>
-        <p>Personagens lendários aguardam por você,</p>
-        <p>prontos para compartilhar suas histórias.</p>
-        <p>Prepare-se para a aventura de sua vida,</p>
-        <p>onde cada escolha molda seu destino.</p>
-        <p>O universo de Star Wars está ao seu alcance,</p>
-        <p>cheio de mistérios e heroísmo.</p>
-        <p>O que você fará com o seu poder?</p>
-        <p>A jornada começa agora!</p>
-      </div>
     </div>
   );
 };

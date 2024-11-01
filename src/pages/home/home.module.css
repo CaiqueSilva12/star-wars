@@ -1,0 +1,22 @@
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+.title {
+  color: yellow;
+  font-size: 50px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 4px;
+  }
+}
