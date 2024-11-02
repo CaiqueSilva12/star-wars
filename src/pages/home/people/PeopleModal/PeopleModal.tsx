@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import axios from 'axios';
-import { IPeople } from '../../interfaces/IPeople';
+import { IPeople } from '../../../../interfaces/IPeople';
 import styles from './PeopleModal.module.css';
 
 interface PersonModalProps {
@@ -65,6 +65,7 @@ const PersonModal: React.FC<PersonModalProps> = ({ visible, onClose, person }) =
       onCancel={onClose}
       footer={null}
       width={800}
+      className={styles.modalBody}
     >
       <div className={styles.nameHighlight}>
         {person ? person.name : 'Detalhes da Pessoa'}

@@ -37,9 +37,7 @@
   max-width: 300px;
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #555;
-  background-color: #dbdbdb;
-  color: #111111;
+  border: 1px solid yellow;
 }
 
 .submitButton {

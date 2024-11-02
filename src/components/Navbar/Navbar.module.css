@@ -1,7 +1,6 @@
 .navbar {
   background-color: #FFFF20;
   box-shadow: 2px 2px 4px rgba(0, 0, 255, 0.5);
-  /* position: fixed; */
   width: 100%;
   top: 0;
   z-index: 1000;
@@ -13,12 +12,18 @@
 
 .welcomeMessage {
   font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 255, 0.5);
   font-weight: bold;
   margin-inline: 40px;
 }
 
 .logoutButton {
-  color: black;
+  background-color: #f0f0f0;
+  color: #333333;
   cursor: pointer;
   margin-inline: 40px;
+}
+
+.logoutButton:hover {
+  background-color: #e0e0e0;
 }

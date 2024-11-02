@@ -11,7 +11,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
       placeholder="Buscar por nome"
       onSearch={onSearch}
       enterButton
-      style={{ marginBottom: 20 }}
+      style={{ marginBottom: 20, marginTop: 20 }}
     />
   );
 };

@@ -1,7 +1,9 @@
 .container {
   text-align: center;
   padding-inline: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 40px;
+  width: 100vw;
+  height: 100vh;
 }
 
 .title {

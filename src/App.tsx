@@ -9,6 +9,9 @@ const App = () => {
       <ConfigProvider theme={{
         token: {
           colorPrimary: '#FFFF20',
+          colorTextBase: '#ffffff',
+          colorBgContainer: '#1f1f2e',
+          colorTextSecondary: '#d9d9d9',
         }
       }}>
         <Routes>
