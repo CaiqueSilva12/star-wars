@@ -28,8 +28,6 @@ const Login = () => {
   };
 
   const handleNameSubmit = async (name: string) => {
-    console.log('Nome informado:', name);
-
     Modal.success({
       content: `Bem-vindo, ${name}!`,
       centered: true,
