@@ -44,8 +44,8 @@ const Login = () => {
   };
 
   const handleSkipAnimation = () => {
-    setIsAnimationPlaying(false); // Para a animação
-    navigate('/home'); // Redireciona para a página inicial
+    setIsAnimationPlaying(false);
+    navigate('/home');
   };
 
   return (

@@ -1,5 +1,5 @@
-import { Table, Spin, TablePaginationConfig, Pagination } from "antd";
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Table, Spin, TablePaginationConfig, Pagination, Dropdown, Checkbox, Button } from "antd";
+import { InfoCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState, useMemo } from "react";
 import { axiosInstance } from "../../../../utils/apiRequest";
 import styles from './SpeciesTable.module.css';
@@ -23,10 +23,12 @@ const SpeciesTable = () => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedSpecies, setSelectedSpecies] = useState<ISpecies | null>(null);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(['name', 'url']);
+  
   const pageSize = 10;
   const totalPages = 4;
   const size = useWindowSize();
-  const isSmallScreen = size.width !== undefined && size.width < 920;
+  const isSmallScreen = size.width !== undefined && size.width < 1200;
 
   const fetchSpecies = async (page: number, fetchAll = false) => {
     setLoading(true);
@@ -54,12 +56,8 @@ const SpeciesTable = () => {
   };
 
   useEffect(() => {
-    if (searchText) {
-      fetchSpecies(currentPage, true);
-    } else {
-      fetchSpecies(currentPage);
-    }
-  }, [currentPage, searchText]);
+    fetchSpecies(currentPage);
+  }, [currentPage]);
 
   const memoizedData = useMemo(() => {
     return species.map(specie => ({
@@ -76,8 +74,8 @@ const SpeciesTable = () => {
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
-    return searchText ? filteredData.slice(startIndex, startIndex + pageSize) : memoizedData;
-  }, [filteredData, memoizedData, currentPage, searchText]);
+    return filteredData.slice(startIndex, startIndex + pageSize);
+  }, [filteredData, currentPage]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const page = pagination.current || 1;
@@ -94,25 +92,12 @@ const SpeciesTable = () => {
     setSelectedSpecies(null);
   };
 
-  const columns: ColumnsProps[] = useMemo(() => {
-    if (isSmallScreen) {
-      return [
-        { title: 'Nome', dataIndex: 'name', key: 'name', align: 'center' },
-        {
-          title: 'Mais Informações',
-          dataIndex: 'url',
-          key: 'url',
-          align: 'center',
-          render: (_text: any, record: ISpecies) => (
-            <a onClick={() => handleOpenModal(record)} style={{ cursor: 'pointer' }}>
-              <InfoCircleOutlined style={{ fontSize: '20px', color: '#1890ff' }} />
-            </a>
-          ),
-        },
-      ];
-    }
+  const handleColumnVisibilityChange = (checkedValues: any) => {
+    setVisibleColumns(checkedValues);
+  };
 
-    return [
+  const columns: ColumnsProps[] = useMemo(() => {
+    const allColumns: ColumnsProps[] = [
       { title: 'Nome', dataIndex: 'name', key: 'name', align: 'center' },
       { title: 'Classificação', dataIndex: 'classification', key: 'classification', align: 'center' },
       { title: 'Designação', dataIndex: 'designation', key: 'designation', align: 'center' },
@@ -131,7 +116,23 @@ const SpeciesTable = () => {
         ),
       },
     ];
-  }, [isSmallScreen, species]);
+
+    if (isSmallScreen) {
+      return allColumns.filter(column => ['name', 'url'].includes(column.key));
+    } else {
+      return allColumns.filter(column => visibleColumns.includes(column.key));
+    }
+  }, [visibleColumns, isSmallScreen]);
+
+  const columnOptions = [
+    { label: 'Nome', value: 'name' },
+    { label: 'Classificação', value: 'classification' },
+    { label: 'Designação', value: 'designation' },
+    { label: 'Altura Média', value: 'average_height' },
+    { label: 'Cores da Pele', value: 'skin_colors' },
+    { label: 'Linguagem', value: 'language' },
+    { label: 'Mais Informações', value: 'url' },
+  ];
 
   return (
     <div className={styles.container}>
@@ -141,7 +142,21 @@ const SpeciesTable = () => {
         </div>
       ) : (
         <>
-          <SearchInput onSearch={setSearchText} />
+          <div className={styles.searchFilterContainer}>
+            <SearchInput onSearch={setSearchText} />
+            <Dropdown
+              overlay={
+                <Checkbox.Group
+                  options={columnOptions}
+                  defaultValue={visibleColumns}
+                  onChange={handleColumnVisibilityChange}
+                />
+              }
+              trigger={['click']}
+            >
+              <Button icon={<SettingOutlined />}>Filtrar Colunas</Button>
+            </Dropdown>
+          </div>
           <Table
             columns={columns}
             dataSource={paginatedData}
@@ -156,7 +171,7 @@ const SpeciesTable = () => {
           <Pagination
             current={currentPage}
             pageSize={pageSize}
-            total={searchText ? filteredData.length : totalPages * pageSize}
+            total={filteredData.length}
             onChange={page => setCurrentPage(page)}
             className={styles.pagination}
           />

@@ -1,6 +1,6 @@
 // components/PlanetsTable/PlanetsTable.tsx
-import { Table, Spin, TablePaginationConfig, Pagination } from "antd";
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Table, Spin, TablePaginationConfig, Pagination, Dropdown, Checkbox, Button } from "antd";
+import { InfoCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState, useMemo } from "react";
 import { axiosInstance } from "../../../../utils/apiRequest";
 import styles from './PlanetsTable.module.css';
@@ -24,10 +24,11 @@ const PlanetsTable = () => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlanet, setSelectedPlanet] = useState<IPlanet | null>(null);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(['name', 'rotation_period', 'orbital_period', 'diameter', 'surface_water', 'population', 'url']);
   const pageSize = 10;
   const totalPages = 6;
   const size = useWindowSize();
-  const isSmallScreen = size.width !== undefined && size.width < 920;
+  const isSmallScreen = size.width !== undefined && size.width < 1200;
 
   const fetchPlanets = async (page: number, fetchAll = false) => {
     setLoading(true);
@@ -96,24 +97,7 @@ const PlanetsTable = () => {
   };
 
   const columns: ColumnsProps[] = useMemo(() => {
-    if (isSmallScreen) {
-      return [
-        { title: 'Nome', dataIndex: 'name', key: 'name', align: 'center' },
-        {
-          title: 'Mais Informações',
-          dataIndex: 'url',
-          key: 'url',
-          align: 'center',
-          render: (_text: any, record: IPlanet) => (
-            <a onClick={() => handleOpenModal(record)} style={{ cursor: 'pointer' }}>
-              <InfoCircleOutlined style={{ fontSize: '20px', color: '#1890ff' }} />
-            </a>
-          ),
-        },
-      ];
-    }
-
-    return [
+    const allColumns: ColumnsProps[] = [
       { title: 'Nome', dataIndex: 'name', key: 'name', align: 'center' },
       { title: 'Período de Rotação', dataIndex: 'rotation_period', key: 'rotation_period', align: 'center' },
       { title: 'Período Orbital', dataIndex: 'orbital_period', key: 'orbital_period', align: 'center' },
@@ -132,7 +116,27 @@ const PlanetsTable = () => {
         ),
       },
     ];
-  }, [isSmallScreen, planets]);
+
+    if (isSmallScreen) {
+      return allColumns.filter(column => ['name', 'url'].includes(column.key));
+    } else {
+      return allColumns.filter(column => visibleColumns.includes(column.key));
+    }
+  }, [visibleColumns, isSmallScreen]);
+
+  const handleColumnVisibilityChange = (checkedValues: any) => {
+    setVisibleColumns(checkedValues);
+  };
+
+  const columnOptions = [
+    { label: 'Nome', value: 'name' },
+    { label: 'Período de Rotação', value: 'rotation_period' },
+    { label: 'Período Orbital', value: 'orbital_period' },
+    { label: 'Diâmetro', value: 'diameter' },
+    { label: 'Água na Superfície', value: 'surface_water' },
+    { label: 'População', value: 'population' },
+    { label: 'Mais Informações', value: 'url' },
+  ];
 
   return (
     <div className={styles.container}>
@@ -142,7 +146,21 @@ const PlanetsTable = () => {
         </div>
       ) : (
         <>
-          <SearchInput onSearch={setSearchText} />
+          <div className={styles.searchFilterContainer}>
+            <SearchInput onSearch={setSearchText} />
+            <Dropdown
+              overlay={
+                <Checkbox.Group
+                  options={columnOptions}
+                  defaultValue={visibleColumns}
+                  onChange={handleColumnVisibilityChange}
+                />
+              }
+              trigger={['click']}
+            >
+              <Button icon={<SettingOutlined />}>Filtrar Colunas</Button>
+            </Dropdown>
+          </div>
           <Table
             columns={columns}
             dataSource={paginatedData}
@@ -150,7 +168,7 @@ const PlanetsTable = () => {
             size="middle"
             sticky
             showHeader
-            rowKey="url"
+            rowKey="key"
             pagination={false}
             onChange={handleTableChange}
           />
@@ -162,9 +180,9 @@ const PlanetsTable = () => {
             className={styles.pagination}
           />
           <PlanetsModal
-            visible={modalVisible} 
-            onClose={handleCloseModal} 
-            planet={selectedPlanet} 
+            visible={modalVisible}
+            onClose={handleCloseModal}
+            planet={selectedPlanet}
           />
         </>
       )}

@@ -10,6 +10,13 @@
   height: 100vh;
 }
 
+.searchFilterContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .pagination {
   display: flex;
   justify-content: center;

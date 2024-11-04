@@ -1,5 +1,5 @@
-import { Table, Spin } from "antd";
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { Table, Spin, Dropdown, Checkbox, Button } from "antd";
+import { InfoCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { useEffect, useState, useMemo } from "react";
 import { axiosInstance } from "../../../../utils/apiRequest";
 import styles from './FilmsTable.module.css';
@@ -22,8 +22,9 @@ const FilmsTable = () => {
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState<IFilm | null>(null);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(['title', 'episode_id', 'director', 'producer', 'release_date', 'url']);
   const size = useWindowSize();
-  const isSmallScreen = size.width !== undefined && size.width < 920;
+  const isSmallScreen = size.width !== undefined && size.width < 1200;
 
   const fetchFilms = async () => {
     setLoading(true);
@@ -65,24 +66,7 @@ const FilmsTable = () => {
   };
 
   const columns: ColumnsProps[] = useMemo(() => {
-    if (isSmallScreen) {
-      return [
-        { title: 'Título', dataIndex: 'title', key: 'title', align: 'center' },
-        {
-          title: 'Mais Informações',
-          dataIndex: 'url',
-          key: 'url',
-          align: 'center',
-          render: (_text: any, record: IFilm) => (
-            <a onClick={() => handleOpenModal(record)} style={{ cursor: 'pointer' }}>
-              <InfoCircleOutlined style={{ fontSize: '20px', color: '#1890ff' }} />
-            </a>
-          ),
-        },
-      ];
-    }
-
-    return [
+    const allColumns: ColumnsProps[] = [
       { title: 'Título', dataIndex: 'title', key: 'title', align: 'center' },
       { title: 'ID do Episódio', dataIndex: 'episode_id', key: 'episode_id', align: 'center' },
       { title: 'Diretor', dataIndex: 'director', key: 'director', align: 'center' },
@@ -100,7 +84,26 @@ const FilmsTable = () => {
         ),
       },
     ];
-  }, [isSmallScreen, films]);
+
+    if (isSmallScreen) {
+      return allColumns.filter(column => ['title', 'url'].includes(column.key));
+    } else {
+      return allColumns.filter(column => visibleColumns.includes(column.key));
+    }
+  }, [visibleColumns, isSmallScreen]);
+
+  const handleColumnVisibilityChange = (checkedValues: any) => {
+    setVisibleColumns(checkedValues);
+  };
+
+  const columnOptions = [
+    { label: 'Título', value: 'title' },
+    { label: 'ID do Episódio', value: 'episode_id' },
+    { label: 'Diretor', value: 'director' },
+    { label: 'Produtor', value: 'producer' },
+    { label: 'Data de Lançamento', value: 'release_date' },
+    { label: 'Mais Informações', value: 'url' },
+  ];
 
   return (
     <div className={styles.container}>
@@ -110,7 +113,21 @@ const FilmsTable = () => {
         </div>
       ) : (
         <>
-          <SearchInput onSearch={setSearchText} />
+          <div className={styles.searchFilterContainer}>
+            <SearchInput onSearch={setSearchText} />
+            <Dropdown
+              overlay={
+                <Checkbox.Group
+                  options={columnOptions}
+                  defaultValue={visibleColumns}
+                  onChange={handleColumnVisibilityChange}
+                />
+              }
+              trigger={['click']}
+            >
+              <Button icon={<SettingOutlined />}>Filtrar Colunas</Button>
+            </Dropdown>
+          </div>
           <Table
             columns={columns}
             dataSource={filteredData}
