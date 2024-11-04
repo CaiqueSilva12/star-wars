@@ -4,7 +4,7 @@
 
 Esse projeto foi desenvolvido com React, Vite, TypeScript e CSS Modules, 
 utilizando algumas bibliotecas externas para manter o código mais organizado. 
-As bibliotecas utilizadas são: axios, antd, dotenc, react-redux e redux-persist. 
+As bibliotecas utilizadas são: axios, antd, dotenv, react-redux e redux-persist. 
 
 Este projeto foi criado para o desafio de Front-End da POWER DATA TECNOLOGIA ANALITICA LTDA.
 
