@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+### README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Sobre o Projeto
 
-Currently, two official plugins are available:
+Esse projeto foi desenvolvido com React, Vite, TypeScript e CSS Modules, 
+utilizando algumas bibliotecas externas para manter o código mais organizado. 
+As bibliotecas utilizadas são: axios, antd, dotenc, react-redux e redux-persist. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este projeto foi criado para o desafio de Front-End da POWER DATA TECNOLOGIA ANALITICA LTDA.
 
-## Expanding the ESLint configuration
+## Pré-requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Tenha instaladas em sua máquina as ferramentas Git, Node Package Manager e Yarn (ou outro gerenciador de pacotes de sua preferência) para poder trabalhar no projeto.
 
-- Configure the top-level `parserOptions` property like this:
+### Instruções para Rodar a Aplicação
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. Clone o repositório em seu computador:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+    ```bash
+    git clone git@github.com:CaiqueSilva12/star-wars.git
+    ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. Acesse a pasta do projeto:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+    ```bash
+    cd star-wars
+    ```
+
+3. Instale as dependências necessárias:
+
+    ```bash
+    npm install
+    ```
+
+5. Execute o seguinte comando para rodar a aplicação:
+
+    ```bash
+    npm run dev
+    ```
